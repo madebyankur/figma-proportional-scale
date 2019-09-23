@@ -27,7 +27,6 @@
       <div>
         <button class='button button--primary' id="create">Scale</button>
       </div>
-      <script href="figma-plugin-ds.min.js"></script>
       <script>
         onmessage = (event) => {
           let initialWidth = document.getElementById('width').value = String(event.data.pluginMessage.objectWidth)
@@ -35,18 +34,19 @@
           let initialHeight = document.getElementById('height').value = String(event.data.pluginMessage.objectHeight)
 
           document.getElementById('create').onclick = () => {
-            let widthValue = document.getElementById('width');
-            let heightValue = document.getElementById('height');
-            let stroke = String(event.data.pluginMessage.objectStroke);
-            let width = parseInt(widthValue.value);
-            let height = parseInt(heightValue.value);
-            let ratioWidth = width / initialWidth;
-            let ratioHeight = height / initialHeight;
+            let widthValue = document.getElementById('width')
+            let heightValue = document.getElementById('height')
+            let stroke = String(event.data.pluginMessage.objectStroke)
+            let radius = String(event.data.pluginMessage.objectRadius)
+            let width = parseInt(widthValue.value)
+            let height = parseInt(heightValue.value)
+            let ratioWidth = width / initialWidth
+            let ratioHeight = height / initialHeight
             if (width != initialWidth) {
-              parent.postMessage({ pluginMessage: { type: 'resizeWidth', stroke, width, height, ratioWidth } }, '*');
+              parent.postMessage({ pluginMessage: { type: 'resizeWidth', width, height, ratioWidth, stroke, radius } }, '*')
               heightValue.value = height * ratioWidth
             } else {
-              parent.postMessage({ pluginMessage: { type: 'resizeHeight', stroke, width, height, ratioHeight } }, '*');
+              parent.postMessage({ pluginMessage: { type: 'resizeHeight', width, height, ratioHeight, stroke, radius } }, '*')
               widthValue.value = width * ratioHeight
             }
           }

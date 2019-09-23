@@ -1,22 +1,18 @@
-This plugin template uses Typescript. If you are familiar with Javascript, Typescript will
-look very familiar. In fact, valid Javascript code is already valid Typescript code.
+![alt text](https://github.com/madebyankur/figma-proportional-scale/raw/master/assets/cover-2000x1200.png "Figma Proportional Scale")
 
-Typescript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+# Figma Proportional Scale
+Easily resize your shapes with all other attributes resizing proportionally.
 
-For more information, visit https://www.typescriptlang.org/
+## Usage
+Select a shape on your canvas.
+Press `command + /` and search for **'Proportional Scale'**
+Run the plugin
+`command + shift + p` to re-run the plugin instantly
 
-Using Typescript requires a compiler to convert Typescript (code.ts) into Javascript (code.js)
-for the browser to run.
-
-To get the TypeScript compiler working:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Install the TypeScript compiler globally: `sudo npm install -g typescript`.
-3. Open this directory in Visual Studio Code.
-4. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "tsc: watch - tsconfig.json". You will have to do this again every time
-    you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+## Installation and contributing
+Clone the repository: git clone https://github.com/madebyankur/figma-proportional-scale.git
+Go to the directory: cd figma-proportional-scale
+Install figplug: npm i -g figplug
+Build the plugin: figplug build -w -o=build
+Add a new development plugin to Figma
+Select the figma-ios-export-settings/build/manifest.json file as the manifest
