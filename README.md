@@ -1,4 +1,4 @@
-![alt text](https://github.com/madebyankur/figma-proportional-scale/raw/master/assets/cover-2000x1200.png "Figma Proportional Scale")
+![alt text](https://github.com/madebyankur/figma-proportional-scale/raw/master/assets/cover.png "Figma Proportional Scale")
 
 # Figma Proportional Scale
 Easily resize your shapes with all other attributes resizing proportionally.

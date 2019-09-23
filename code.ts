@@ -1,6 +1,5 @@
 const current = figma.currentPage
 
-
 // 2. Grab current selection (only first one if more nodes are selected)
 const selected = current.selection["0"]
 const objectShadowRadius = selected.effects.forEach(function(item, index, array){}).radius
