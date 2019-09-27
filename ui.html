@@ -62,7 +62,6 @@
             if (width != initialWidth) {
               parent.postMessage({ pluginMessage: { type: 'resizeWidth', percentage, width, height, ratioWidth, stroke, radius } }, '*')
               heightValue.value = height * ratioWidth
-              console.log(pixelRounding)
             } else if (height != initialHeight) {
               parent.postMessage({ pluginMessage: { type: 'resizeHeight', percentage, width, height, ratioHeight, stroke, radius } }, '*')
               widthValue.value = width * ratioHeight

@@ -1,6 +1,5 @@
 // 1. Grab current selection (only first one if more nodes are selection)
-const selection = figma.currentPage.selection, componentSpacing = 24;
-var componentsPage, componentName, toSelect = [], multipleComponents = false;
+const selection = figma.currentPage.selection;
 // 2. Show Plugin UI
 figma.showUI(__html__, { width: 240, height: 400 });
 // 3. Send data to plugin UI
@@ -23,7 +22,6 @@ figma.ui.onmessage = msg => {
                 selection["0"].resize(Math.round(msg.width * msg.ratioPercentage), Math.round(msg.height * msg.ratioPercentage));
                 selection["0"].strokeWeight = Math.round(msg.stroke * msg.ratioPercentage);
                 selection["0"].cornerRadius = Math.round(msg.radius * msg.ratioPercentage);
-                console.log(msg.pixelRounding);
             })
             : msg.type === 'resizeWidth' === true ?
                 selection.forEach(node => {
