@@ -1,9 +1,0 @@
-.DS_Store
-node_modules
-.env
-npm-debug.log
-.editorconfig
-.vscode
-.gitignore
-manifest.json
-tsconfig.json
