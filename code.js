@@ -22,7 +22,6 @@ figma.ui.postMessage({
 });
 // 4. Receive data from plugin UI
 figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
-    console.log(msg.stroke);
     if (msg.type == 'resize-by-percentage') {
         selection.resize(Math.round(msg.width * msg.percentageRatio), Math.round(msg.height * msg.percentageRatio));
         selection.strokeWeight = Math.round(stroke * msg.percentageRatio);

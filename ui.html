@@ -55,8 +55,6 @@
             // Calculate ratio
             const percentageRatio = percentageField.value / 100
 
-            console.log(percentageRatio)
-
             if (confirmation) {
                 parent.postMessage(
                   {
@@ -81,7 +79,6 @@
 
               // Calculate ratio
               const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
-              console.log(widthRatio)
 
               if (confirmation) {
                 parent.postMessage(
@@ -107,7 +104,6 @@
 
               // Calculate ratio
               const heightRatio = heightField.value / event.data.pluginMessage.objectHeight
-              console.log(heightRatio)
 
               if (confirmation) {
                 parent.postMessage(
