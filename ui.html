@@ -34,42 +34,109 @@
       </div>
       <div class="divider"></div>
       <div>
-        <button class='button button--primary' id="create">Scale</button>
+        <button class='button button--secondary' id="close">Close</button>
       </div>
       <script>
         onmessage = (event) => {
-          let initialPercentage = document.getElementById('percentage').value = String('100')
+          // Get elements from plugin UI
+          let percentageField = document.getElementById("percentage")
+          let widthField = document.getElementById("width")
+          let heightField = document.getElementById("height")
 
-          let initialWidth = document.getElementById('width').value = String(event.data.pluginMessage.objectWidth)
+          // Set field values to object attributes
+          const percentage = percentageField.value = String('100')
+          const width = widthField.value = String(event.data.pluginMessage.objectWidth)
+          const height = heightField.value = String(event.data.pluginMessage.objectHeight)
 
-          let initialHeight = document.getElementById('height').value = String(event.data.pluginMessage.objectHeight)
+          // On changing percentage value do this
+          percentageField.oninput = () => {
+            let confirmation = true
 
-          document.getElementById('create').onclick = () => {
-            let percentageValue = document.getElementById('percentage')
-            let widthValue = document.getElementById('width')
-            let heightValue = document.getElementById('height')
-            let stroke = String(event.data.pluginMessage.objectStroke)
-            let radius = String(event.data.pluginMessage.objectRadius)
-            let percentage = parseInt(percentageValue.value)
-            let width = parseInt(widthValue.value)
-            let height = parseInt(heightValue.value)
-            let ratioPercentage = percentage / initialPercentage
-            let ratioWidth = width / initialWidth
-            let ratioHeight = height / initialHeight
-            if (width != initialWidth) {
-              parent.postMessage({ pluginMessage: { type: 'resizeWidth', percentage, width, height, ratioWidth, stroke, radius } }, '*')
-              heightValue.value = height * ratioWidth
-            } else if (height != initialHeight) {
-              parent.postMessage({ pluginMessage: { type: 'resizeHeight', percentage, width, height, ratioHeight, stroke, radius } }, '*')
-              widthValue.value = width * ratioHeight
-            } else if (percentage != initialPercentage) {
-              parent.postMessage({ pluginMessage: { type: 'resizePercentage', percentage, width, height, ratioPercentage, stroke, radius } }, '*')
-              percentageValue.value = percentage * ratioPercentage
-            } else {
-              parent.postMessage({ pluginMessage: { type: 'error' } }, '*')
+            // Calculate ratio
+            const percentageRatio = percentageField.value / 100
+
+            console.log(percentageRatio)
+
+            if (confirmation) {
+                parent.postMessage(
+                  {
+                    pluginMessage: {
+                      type: 'resize-by-percentage',
+                      percentage,
+                      width,
+                      height,
+                      percentageRatio
+                    }
+                  },
+                  '*'
+                )
+              }
+              widthField.value = Math.round(width * percentageRatio)
+              heightField.value = Math.round(height * percentageRatio)
+            }
+
+            // On changing width value do this
+            widthField.oninput = () => {
+              let confirmation = true
+
+              // Calculate ratio
+              const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
+              console.log(widthRatio)
+
+              if (confirmation) {
+                parent.postMessage(
+                  {
+                    pluginMessage: {
+                      type: 'resize-by-width',
+                      percentage,
+                      width,
+                      height,
+                      widthRatio
+                    }
+                  },
+                  '*'
+                )
+              }
+              percentageField.value = Math.round(percentage * widthRatio)
+              heightField.value = Math.round(height * widthRatio)
+            }
+
+            // On changing height value do this
+            heightField.oninput = () => {
+              let confirmation = true
+
+              // Calculate ratio
+              const heightRatio = heightField.value / event.data.pluginMessage.objectHeight
+              console.log(heightRatio)
+
+              if (confirmation) {
+                parent.postMessage(
+                  {
+                    pluginMessage: {
+                      type: 'resize-by-height',
+                      percentage,
+                      width,
+                      height,
+                      heightRatio
+                    }
+                  },
+                  '*'
+                )
+              }
+              percentageField.value = Math.round(percentage * heightRatio)
+              widthField.value = Math.round(width * heightRatio)
             }
           }
+
+        document.getElementById("close").onclick = () => {
+          parent.postMessage({ pluginMessage: { type: "close" } }, "*");
         }
+
+        window.addEventListener("keydown", function (event) {
+          if(event.key === "Escape") {
+            parent.postMessage({ pluginMessage: { type: "close" } }, "*");
+          }
+        })
       </script>
   </body>
   </html>
