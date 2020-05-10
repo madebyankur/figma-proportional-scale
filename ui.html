@@ -3,6 +3,13 @@
   #percentage::after {
     content: '%';
   }
+  #percentage {
+    width: 60%;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
       <div class="onboarding-tip">
         <div class="onboarding-tip__icon">
@@ -15,26 +22,31 @@
         <div class="input-icon__icon">
           <div class="icon icon--arrow-left-right icon--black-3" suffix="%"></div>
           </div>
-        <input type="number" class="input-icon__input percentage" id="percentage">
+        <div class="row">
+          <input type="number" class="input-icon__input percentage" id="percentage">
+          <button class='button button--primary' id="resize-percentage">Resize</button>
+      </div>
      </div>
-      <div class="label">Width</div>
-      <div class="input-icon">
-        <div class="input-icon__icon">
-          <div class="icon icon--arrow-left-right icon--black-3"></div>
-          </div>
-        <input type="number" class="input-icon__input" id="width">
-     </div>
-     <div class="divider"></div>
-     <div class="label">Height</div>
+     <div class="label">Width</div>
      <div class="input-icon">
-      <div class="input-icon__icon">
-        <div class="icon icon--arrow-up-down icon--black-3"></div>
+       <div class="input-icon__icon">
+         <div class="icon icon--arrow-left-right icon--black-3"></div>
         </div>
-        <input type="number" class="input-icon__input"  id="height">
+        <div class="row">
+          <input type="number" class="input-icon__input" id="width">
+          <button class='button button--primary' id="resize-width">Resize</button>
+        </div>
       </div>
       <div class="divider"></div>
-      <div>
-        <button class='button button--secondary' id="close">Close</button>
+      <div class="label">Height</div>
+      <div class="input-icon">
+        <div class="input-icon__icon">
+          <div class="icon icon--arrow-up-down icon--black-3"></div>
+        </div>
+        <div class="row">
+          <input type="number" class="input-icon__input"  id="height">
+          <button class='button button--primary' id="resize-height">Resize</button>
+        </div>
       </div>
       <script>
         onmessage = (event) => {
@@ -44,12 +56,12 @@
           let heightField = document.getElementById("height")
 
           // Set field values to object attributes
-          const percentage = percentageField.value = String('100')
+          const percentage = percentageField.value = (100)
           const width = widthField.value = String(event.data.pluginMessage.objectWidth)
           const height = heightField.value = String(event.data.pluginMessage.objectHeight)
 
           // On changing percentage value do this
-          percentageField.oninput = () => {
+          percentageInput = () => {
             let confirmation = true
 
             // Calculate ratio
@@ -74,7 +86,7 @@
             }
 
             // On changing width value do this
-            widthField.oninput = () => {
+            widthInput = () => {
               let confirmation = true
 
               // Calculate ratio
@@ -99,7 +111,7 @@
             }
 
             // On changing height value do this
-            heightField.oninput = () => {
+            heightInput = () => {
               let confirmation = true
 
               // Calculate ratio
@@ -124,15 +136,15 @@
             }
           }
 
-        document.getElementById("close").onclick = () => {
-          parent.postMessage({ pluginMessage: { type: "close" } }, "*");
+        document.getElementById("resize-percentage").onclick = () => {
+          percentageInput()
         }
-
-        window.addEventListener("keydown", function (event) {
-          if(event.key === "Escape") {
-            parent.postMessage({ pluginMessage: { type: "close" } }, "*");
-          }
-        })
+        document.getElementById("resize-width").onclick = () => {
+          widthInput()
+        }
+        document.getElementById("resize-height").onclick = () => {
+          heightInput()
+        }
       </script>
   </body>
   </html>

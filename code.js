@@ -7,84 +7,87 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// 1. Grab current selection (only first one if more nodes are selection)
-let selection = figma.currentPage.selection["0"];
-let stroke = selection.strokeWeight;
-let radius = selection.cornerRadius;
-// 2. Show Plugin UI
-figma.showUI(__html__, { width: 240, height: 400 });
-// 3. Send data to plugin UI
-figma.ui.postMessage({
-    "objectWidth": selection.width,
-    "objectHeight": selection.height,
-    "objectStroke": selection.strokeWeight,
-    "objectRadius": selection.cornerRadius,
-});
-// 4. Receive data from plugin UI
-figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
-    if (msg.type == 'resize-by-percentage') {
-        selection.resize(Math.round(msg.width * msg.percentageRatio), Math.round(msg.height * msg.percentageRatio));
-        selection.strokeWeight = Math.round(stroke * msg.percentageRatio);
-        selection.cornerRadius = Math.round(radius * msg.percentageRatio);
-    }
-    else if (msg.type == 'resize-by-width') {
-        selection.resize(Math.round(msg.width * msg.widthRatio), Math.round(msg.height * msg.widthRatio));
-        selection.strokeWeight = Math.round(stroke * msg.widthRatio);
-        selection.cornerRadius = Math.round(radius * msg.widthRatio);
-    }
-    else if (msg.type == 'resize-by-height') {
-        selection.resize(Math.round(msg.width * msg.heightRatio), Math.round(msg.height * msg.heightRatio));
-        selection.strokeWeight = Math.round(stroke * msg.heightRatio);
-        selection.cornerRadius = Math.round(radius * msg.heightRatio);
-    }
-    else {
-        figma.closePlugin();
-    }
-});
-// figma.ui.onmessage = msg => {
-//     if (msg.type === 'error' === true) {
-//       figma.notify(`Whoops! Please enter a value in one of the inputs below. 😔 `)
-//     } else {
-//     // One way of distinguishing between different types of messages sent from
-//     // your HTML page is to use an object with a "type" property like this.
-//     msg.type === 'resize-by-percentage' === true ?
-//       selection.forEach(node => {
-//         selection["0"].resize(Math.round(msg.width * msg.ratioPercentage), Math.round(msg.height * msg.ratioPercentage))
-//         selection["0"].strokeWeight = Math.round(msg.stroke * msg.ratioPercentage)
-//         selection["0"].cornerRadius = Math.round(msg.radius * msg.ratioPercentage)
-//       })
-//     : msg.type === 'resizeWidth' === true ?
-//       selection.forEach(node => {
-//         selection["0"].resize(msg.width, Math.round(msg.height * msg.ratioWidth))
-//         selection["0"].strokeWeight = Math.round(msg.stroke * msg.ratioWidth)
-//         selection["0"].cornerRadius = Math.round(msg.radius * msg.ratioWidth)
-//       })
-//     : msg.type === 'resizeHeight' === true ?
-//       selection.forEach(node => {
-//         selection["0"].resize(Math.round(msg.width * msg.ratioHeight), msg.height)
-//         selection["0"].strokeWeight = Math.round(msg.stroke * msg.ratioHeight)
-//         selection["0"].cornerRadius = Math.round(msg.radius * msg.ratioHeight)
-//       })
-//     : msg.type === false
-//     figma.closePlugin()
-//     figma.notify(`⚡️ Hurray! Your selection has been resized.`)
-//     }
-//   }
-function filterLayers(data, predicate) {
-    return !!!data
-        ? null
-        : data.reduce((list, entry) => {
-            let clone = null;
-            if (predicate(entry)) {
-                clone = entry;
-                list.push(clone);
-            }
-            else if (entry.children != null) {
-                let children = filterLayers(entry.children, predicate);
-                if (children.length > 0) {
-                    list.push(...children);
-                }
-            }
-            return list;
-        }, []);
+const selection = figma.currentPage.selection;
+for (const node of selection) {
+    let x = node.findAll((node) => node.x);
+    let y = node.findAll((node) => node.y);
+    let n = node.findAll((node) => node.width && node.height);
+    let radius = node.findAll((node) => node.cornerRadius > 0);
+    let stroke = node.findAll((node) => node.strokeWeight > 0);
+    // 2. Show Plugin UI
+    figma.showUI(__html__, { width: 240, height: 400 });
+    // 3. Send data to plugin UI
+    figma.ui.postMessage({
+        objectWidth: node.width,
+        objectHeight: node.height,
+        objectStroke: node.strokeWeight,
+        objectRadius: node.cornerRadius,
+    });
+    // 4. Receive data from plugin UI
+    figma.ui.onmessage = (msg) => __awaiter(this, void 0, void 0, function* () {
+        if (msg.type == "resize-by-percentage") {
+            node.resize(Math.round(msg.width * msg.percentageRatio), Math.round(msg.height * msg.percentageRatio));
+            x.forEach((item) => {
+                item.x = Math.round(item.x * msg.percentageRatio);
+            });
+            y.forEach((item) => {
+                item.y = Math.round(item.y * msg.percentageRatio);
+            });
+            n.forEach((item) => {
+                item.resize(Math.round(item.width * msg.percentageRatio), Math.round(item.height * msg.percentageRatio));
+            });
+            node.cornerRadius = Math.round(node.cornerRadius * msg.percentageRatio);
+            radius.forEach((item) => {
+                item.cornerRadius = Math.round(item.cornerRadius * msg.percentageRatio);
+            });
+            node.strokeWeight = Math.round(node.strokeWeight * msg.percentageRatio);
+            stroke.forEach((item) => {
+                item.strokeWeight = Math.round(item.strokeWeight * msg.percentageRatio);
+            });
+            figma.notify(`⚡️ Hurray! Your selection has been resized by percentage.`);
+        }
+        else if (msg.type == "resize-by-width") {
+            node.resize(Math.round(node.width * msg.widthRatio), Math.round(node.height * msg.widthRatio));
+            x.forEach((item) => {
+                item.x = item.x * msg.widthRatio;
+            });
+            y.forEach((item) => {
+                item.y = item.y * msg.widthRatio;
+            });
+            n.forEach((item) => {
+                item.resize(Math.round(item.width * msg.widthRatio), Math.round(item.height * msg.widthRatio));
+            });
+            node.cornerRadius = Math.round(node.cornerRadius * msg.widthRatio);
+            radius.forEach((item) => {
+                item.cornerRadius = Math.round(item.cornerRadius * msg.widthRatio);
+            });
+            node.strokeWeight = Math.round(node.strokeWeight * msg.widthRatio);
+            stroke.forEach((item) => {
+                item.strokeWeight = Math.round(item.strokeWeight * msg.widthRatio);
+            });
+        }
+        else if (msg.type == "resize-by-height") {
+            node.resize(Math.round(node.width * msg.heightRatio), Math.round(node.height * msg.heightRatio));
+            x.forEach((item) => {
+                item.x = item.x * msg.heightRatio;
+            });
+            y.forEach((item) => {
+                item.y = item.y * msg.heightRatio;
+            });
+            n.forEach((item) => {
+                item.resize(Math.round(item.width * msg.heightRatio), Math.round(item.height * msg.heightRatio));
+            });
+            node.cornerRadius = Math.round(node.cornerRadius * msg.heightRatio);
+            radius.forEach((item) => {
+                item.cornerRadius = Math.round(item.cornerRadius * msg.heightRatio);
+            });
+            node.strokeWeight = Math.round(node.strokeWeight * msg.heightRatio);
+            stroke.forEach((item) => {
+                item.strokeWeight = Math.round(item.strokeWeight * msg.heightRatio);
+            });
+        }
+        else {
+            figma.closePlugin();
+        }
+    });
 }
