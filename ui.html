@@ -2130,73 +2130,74 @@
             const percentageRatio = percentageField.value / 100
 
             if (confirmation) {
-                parent.postMessage(
-                  {
-                    pluginMessage: {
-                      type: 'resize-by-percentage',
-                      percentage,
-                      width,
-                      height,
-                      percentageRatio
-                    }
-                  },
-                  '*'
-                )
-              }
-              widthField.value = width * percentageRatio
-              heightField.value = height * percentageRatio
+              parent.postMessage(
+                {
+                  pluginMessage: {
+                    type: 'resize-by-percentage',
+                    percentage,
+                    width,
+                    height,
+                    percentageRatio
+                  }
+                },
+                '*'
+              )
             }
-
-            // On changing width value do this
-            widthInput = () => {
-              let confirmation = true
-
-              // Calculate ratio
-              const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
-
-              if (confirmation) {
-                parent.postMessage(
-                  {
-                    pluginMessage: {
-                      type: 'resize-by-width',
-                      percentage,
-                      width,
-                      height,
-                      widthRatio
-                    }
-                  },
-                  '*'
-                )
-              }
-              percentageField.value = percentage * widthRatio
-              heightField.value = height * widthRatio
-            }
-
-            // On changing height value do this
-            heightInput = () => {
-              let confirmation = true
-
-              // Calculate ratio
-              const heightRatio = heightField.value / event.data.pluginMessage.objectHeight
-
-              if (confirmation) {
-                parent.postMessage(
-                  {
-                    pluginMessage: {
-                      type: 'resize-by-height',
-                      percentage,
-                      width,
-                      height,
-                      heightRatio
-                    }
-                  },
-                  '*'
-                )
-              }
-              percentageField.value = percentage * heightRatio
-              widthField.value = width * heightRatio
-            }
+            widthField.value = width * percentageRatio || 0
+            heightField.value = height * percentageRatio || 0
           }
+
+          // On changing width value do this
+          widthInput = () => {
+            let confirmation = true
+
+            // Calculate ratio
+            const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
+
+
+            if (confirmation) {
+              parent.postMessage(
+                {
+                  pluginMessage: {
+                    type: 'resize-by-width',
+                    percentage,
+                    width,
+                    height,
+                    widthRatio
+                  }
+                },
+                '*'
+              )
+            }
+            percentageField.value = percentage * widthRatio
+            heightField.value = height * widthRatio
+          }
+
+          // On changing height value do this
+          heightInput = () => {
+            let confirmation = true
+
+            // Calculate ratio
+            const heightRatio = heightField.value / event.data.pluginMessage.objectHeight
+
+            if (confirmation) {
+              parent.postMessage(
+                {
+                  pluginMessage: {
+                    type: 'resize-by-height',
+                    percentage,
+                    width,
+                    height,
+                    heightRatio
+                  }
+                },
+                '*'
+              )
+            }
+            percentageField.value = percentage * heightRatio
+            widthField.value = width * heightRatio
+          }
+        }
 
         document.getElementById("resize-percentage").onclick = () => {
           percentageInput()

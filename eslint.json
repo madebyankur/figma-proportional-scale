@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:recommended",
+  "extends": "eslint:recommended",
   "editor.formatOnSave": true,
   "[handlebars]": {
     "editor.formatOnSave": false
