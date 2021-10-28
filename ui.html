@@ -2085,32 +2085,42 @@
         </div>
         <div class="onboarding-tip__msg">This plugin allows you to easily scale various attributes of your shape using a percentage and/or fixed width or height values.</div>
       </div>
-      <div class="label">Percentage</div>
-      <div class="input input--with-icon">
-        <div class="row">
-          <div class="icon icon--adjust"></div>
-          <input type="number" class="input__field" id="percentage">
-          <button class='button button--primary' id="resize-percentage">Scale to Percentage</button>
-        </div>
-     </div>
-     <div class="label">Width</div>
-       <div class="input input--with-icon">
-        <div class="row">
-          <div class="icon icon--arrow-left-right"></div>
-          <input type="number" class="input__field" id="width">
-          <button class='button button--primary' id="resize-width">Scale to Width</button>
+      <form name="percentage-input" target="#" method="post">
+        <label class="label">Percentage</label>
+        <div class="input input--with-icon">
+          <div class="row">
+            <div class="icon icon--adjust"></div>
+            <input type="number" class="input__field" id="percentage" name="percentage" />
+            <button class='button button--primary' id="resize-percentage" type="submit" tabindex="-1">Scale to Percentage</button>
+          </div>
+      </div>
+    </form>
+    <form name="percentage-input" target="#" method="post">
+     <label class="label">Width</label>
+     <div class="input input--with-icon">
+       <div class="row">
+         <div class="icon icon--arrow-left-right"></div>
+          <input type="number" class="input__field" id="width" name="width" />
+          <button class='button button--primary' id="resize-width" type="submit" tabindex="-1">Scale to Width</button>
           </div>
         </div>
-      <div class="divider"></div>
-      <div class="label">Height</div>
-      <div class="input input--with-icon">
-        <div class="row">
-          <div class="icon icon--arrow-up-down"></div>
-          <input type="number" class="input__field"  id="height">
-          <button class='button button--primary' id="resize-height">Scale to Height</button>
+      </form>
+      <form name="percentage-input" target="#" method="post">
+        <label class="label">Height</label>
+        <div class="input input--with-icon">
+          <div class="row">
+            <div class="icon icon--arrow-up-down"></div>
+            <input type="number" class="input__field"  id="height" name="height" />
+            <button class='button button--primary' id="resize-height" type="submit" tabindex="-1">Scale to Height</button>
+          </div>
         </div>
-      </div>
+      </form>
+
       <script>
+        window.onload = function() {
+          document.getElementById("percentage").focus();
+        };
+
         onmessage = (event) => {
           // Get elements from plugin UI
           let percentageField = document.getElementById("percentage")
@@ -2121,6 +2131,7 @@
           const percentage = percentageField.value = (String(event.data.pluginMessage.percentage))
           const width = widthField.value = String(event.data.pluginMessage.objectWidth)
           const height = heightField.value = String(event.data.pluginMessage.objectHeight)
+
 
           // On changing percentage value do this
           percentageInput = () => {
@@ -2153,6 +2164,8 @@
 
             // Calculate ratio
             const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
+
+            console.log(widthField.value / event.data.pluginMessage.objectWidth)
 
 
             if (confirmation) {
