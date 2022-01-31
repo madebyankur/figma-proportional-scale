@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/figma-plugin-ds@1.0.1/dist/figma-plugin-ds.min.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/figma-plugin-ds@1.0.1/dist/figma-plugin-ds.min.css" media="print" onload="this.media='all'" />
+    <style>
+      body {
+        padding: 8px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="onboarding-tip">
+      <div class="onboarding-tip__icon">
+          <div class="icon icon--visible"></div>
+      </div>
+      <div class="onboarding-tip__msg">This plugin allows you to easily scale various attributes of your shape using a percentage and/or fixed width or height values.</div>
+    </div>
+    <form name="percentage-input" target="#" method="post">
+      <label class="label">Percentage</label>
+      <div class="input input--with-icon">
+        <div class="row">
+          <div class="icon icon--adjust"></div>
+          <input type="number" class="input__field" id="percentage" name="percentage" step="" />
+          <button class='button button--primary' id="resize-percentage" type="submit" tabindex="-1">Scale to Percentage</button>
+        </div>
+    </div>
+  </form>
+  <form name="percentage-input" target="#" method="post">
+    <label class="label">Width</label>
+    <div class="input input--with-icon">
+      <div class="row">
+        <div class="icon icon--arrow-left-right"></div>
+        <input type="number" class="input__field" id="width" name="width" />
+        <button class='button button--primary' id="resize-width" type="submit" tabindex="-1">Scale to Width</button>
+        </div>
+      </div>
+    </form>
+    <form name="percentage-input" target="#" method="post">
+      <label class="label">Height</label>
+      <div class="input input--with-icon">
+        <div class="row">
+          <div class="icon icon--arrow-up-down"></div>
+          <input type="number" class="input__field"  id="height" name="height" />
+          <button class='button button--primary' id="resize-height" type="submit" tabindex="-1">Scale to Height</button>
+        </div>
+      </div>
+    </form>
+
+    <script>
+      window.onload = function() {
+        document.getElementById("percentage").focus();
+      };
+
+      onmessage = (event) => {
+        // Get elements from plugin UI
+        let percentageField = document.getElementById("percentage")
+        let widthField = document.getElementById("width")
+        let heightField = document.getElementById("height")
+
+        // Set field values to object attributes
+        const percentage = percentageField.value = (String(event.data.pluginMessage.percentage))
+        const width = widthField.value = String(event.data.pluginMessage.objectWidth)
+        const height = heightField.value = String(event.data.pluginMessage.objectHeight)
+
+
+        // On changing percentage value do this
+        percentageInput = () => {
+          let confirmation = true
+
+          // Calculate ratio
+          const percentageRatio = percentageField.value / 100
+
+          if (confirmation) {
+            parent.postMessage(
+              {
+                pluginMessage: {
+                  type: 'resize-by-percentage',
+                  percentage,
+                  width,
+                  height,
+                  percentageRatio
+                }
+              },
+              '*'
+            )
+          }
+          widthField.value = width * percentageRatio || 0
+          heightField.value = height * percentageRatio || 0
+        }
+
+        // On changing width value do this
+        widthInput = () => {
+          let confirmation = true
+
+          // Calculate ratio
+          const widthRatio = widthField.value / event.data.pluginMessage.objectWidth
+
+          console.log(widthField.value / event.data.pluginMessage.objectWidth)
+
+
+          if (confirmation) {
+            parent.postMessage(
+              {
+                pluginMessage: {
+                  type: 'resize-by-width',
+                  percentage,
+                  width,
+                  height,
+                  widthRatio
+                }
+              },
+              '*'
+            )
+          }
+          percentageField.value = percentage * widthRatio
+          heightField.value = height * widthRatio
+        }
+
+        // On changing height value do this
+        heightInput = () => {
+          let confirmation = true
+
+          // Calculate ratio
+          const heightRatio = heightField.value / event.data.pluginMessage.objectHeight
+
+          if (confirmation) {
+            parent.postMessage(
+              {
+                pluginMessage: {
+                  type: 'resize-by-height',
+                  percentage,
+                  width,
+                  height,
+                  heightRatio
+                }
+              },
+              '*'
+            )
+          }
+          percentageField.value = percentage * heightRatio
+          widthField.value = width * heightRatio
+        }
+      }
+
+      document.getElementById("resize-percentage").onclick = () => {
+        percentageInput()
+      }
+      document.getElementById("resize-width").onclick = () => {
+        widthInput()
+      }
+      document.getElementById("resize-height").onclick = () => {
+        heightInput()
+      }
+    </script>
+  </body>
+</html>

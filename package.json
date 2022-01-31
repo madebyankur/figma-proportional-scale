@@ -1,4 +1,18 @@
 {
+  "name": "figma-proportional-scale",
+  "description": "![alt text](https://github.com/madebyankur/figma-proportional-scale/raw/master/assets/cover.png \"Figma Proportional Scale\")",
+  "version": "2.0.0",
+  "main": "./dist/code.js",
+  "scripts": {
+    "test": "tsc --noEmit",
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "author": "Ankur Chauhan <ankur.chauhan@auth0.com>",
+  "license": "MIT",
+  "dependencies": {
+    "figma-plugin-ds": "^1.0.1"
+  },
   "devDependencies": {
     "@figma/plugin-typings": "^1.28.0"
   }
