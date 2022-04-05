@@ -23,7 +23,10 @@
       }
       .container {
         display: flex;
+        justify-content: space-around;
+        align-content: space-around;
         gap: calc(var(--size) * 4);
+        height: 100%;
       }
       form {
         display: grid;
@@ -118,7 +121,7 @@
   </head>
   <body>
     <div class="container">
-      <div>
+      <div class="col-container">
         <span class="label">Alignment</span>
         <div class="btn-grid">
           <button class="btn_small" id="top-left" onclick="handleClick(this.id)">
@@ -177,7 +180,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="col-container">
         <form name="percentage-input" target="#" method="post">
           <label class="label" for="percentage">Percentage</label>
           <div class="input" id="percentageField">

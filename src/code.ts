@@ -1,5 +1,5 @@
 // show ui in figma
-figma.showUI(__html__, { width: 336, height: 240 });
+figma.showUI(__html__, { width: 384, height: 272 });
 
 // scale function
 const scale = (input: string, alignment?: string) => {
